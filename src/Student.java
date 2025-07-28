@@ -1,6 +1,8 @@
+import java.util.List;
+
 public class Student extends Person {
     
-    private int file;
+    protected int file;
   
     public int getFile() {
         return file;
@@ -16,9 +18,21 @@ public class Student extends Person {
         this.file = file;
     }
 
+    public Student() {
+    }
+
     public void showStudentData() {
-        showData();
-        System.out.println("Student File: " + file);
+        FileInterantion fileInterantion = new FileInterantion();
+
+        List<Student> students  = fileInterantion.loadCourseFromFile();
+
+        for (Student student : students) {
+           
+            System.out.println("Name: " + student.getName());
+            System.out.println("DNI: " + student.getDni());
+            System.out.println("File: " + student.getFile());
+            System.out.println("--------------------");
+        }
     }
 
 
