@@ -8,48 +8,68 @@ public class App {
         Course course = new Course();
         Scanner scanner = new Scanner(System.in);
         FileInterantion fileInterantion = new FileInterantion();
-        
+        Student student = new Student();
         boolean Switch = true;
         
         while (Switch) {
             
-            System.out.print("que desea hacer (1) añadir estudiante (2) mostrar datos del curso (3) salir: ");
+            System.out.println("\n===== MENÚ PRINCIPAL =====");
+            System.out.println("1. Añadir estudiante");
+            System.out.println("2. Mostrar datos del curso");
+            System.out.println("3. Buscar estudiante por DNI");
+            System.out.println("4. Eliminar estudiante por DNI");
+            System.out.println("5. Modificar estudiante");
+            System.out.println("0. Salir");
+            System.out.print("Seleccione una opción: ");
             int value = scanner.nextInt();
 
             System.out.println();
 
             switch (value) {
 
-                case 1:
+                case 0:
+                    System.out.println("Saliendo del programa...");
+                    Switch = false;
+                break;
                 
-                    scanner.nextLine(); 
-                    System.out.print("Ingrese el nombre del estudiante: ");
-                    String name = scanner.nextLine();
+                case 1:
 
+                    scanner.nextLine(); 
                     System.out.print("\nIngrese el DNI del estudiante: ");
                     String dni = scanner.nextLine();
 
-                    System.out.print("\nIngrese el archivo del estudiante: ");
-                    int file = scanner.nextInt();
+                    if(course.searchStudentByDni(dni) == null)
+                    {
 
-                    System.out.println();
-                    Student student = new Student(name, dni, file);
-                    course.addStudent(student);
-                    
-                    fileInterantion.saveCourseToFile(student);
+                        System.out.print("\nIngrese el nombre del estudiante: ");
+                        String name = scanner.nextLine();
+
+                        System.out.print("\nIngrese el archivo del estudiante: ");
+                        int file = scanner.nextInt();
+
+                        if (validationParameters(name, dni, file)) {
+                            
+                            System.out.println();
+                            student.setName(name);
+                            student.setDni(dni);
+                            student.setFile(file);
+                            course.addStudent(student);
+                            fileInterantion.saveCourseToFile(student);
+                        }
+                    }
+                    else {
+                        System.out.println("El estudiante ya existe.\n");
+                    }
+
                 break;
+
                 case 2:
-                    course.countStudents();
+                    
                     System.out.println();
                     course.showCourseData();
                     break;
 
                 case 3:
-                    Switch = false;
-                
-                    break;
-
-                case 4:
 
                     scanner.nextLine();
                     System.out.print("ingrese el dni del estudiante a buscar: ");
@@ -57,11 +77,15 @@ public class App {
                     
                     System.out.println();
 
-                    course.searchStudentByDni(searchDni);
+                    if(course.searchStudentByDni(searchDni) == null){
+                      
+                        System.out.println("\nStudent not found.\n");
+                    }
+                  
                 
                 break;
 
-                case 5:
+                case 4:
                 
                     scanner.nextLine();
                     System.out.print("ingrese el dni del estudiante a eliminar: ");
@@ -71,30 +95,34 @@ public class App {
 
                 break;
 
-                case 6:
-                scanner.nextLine();
+                case 5:
+                    scanner.nextLine();
 
-                System.out.print("ingrese el dni del estudiante a modificar: ");
-                String modifyDni = scanner.nextLine();
+                    System.out.print("ingrese el dni del estudiante a modificar: ");
+                    String modifyDni = scanner.nextLine();
+                    student = course.searchStudentByDni(modifyDni);
 
-                student = course.searchStudentByDni(modifyDni);
+                    if (student != null) {
+                        
+                        System.out.print("Ingrese el nuevo nombre del estudiante: ");
+                        String name = scanner.nextLine();
 
-                if (student != null) {
-                    
-                    System.out.print("Ingrese el nuevo nombre del estudiante: ");
-                    student.name = scanner.nextLine();
+                        System.out.print("Ingrese el nuevo DNI del estudiante: ");
+                        modifyDni = scanner.nextLine();
 
-                    System.out.print("Ingrese el nuevo DNI del estudiante: ");
-                    student.dni = scanner.nextLine();
+                        System.out.print("Ingrese el nuevo archivo del estudiante: ");
+                        int file = scanner.nextInt();
+                        
+                        if(validationParameters(name, modifyDni, file)){
+                            Student newStudent = new Student(name, modifyDni, file);
 
-                    System.out.print("Ingrese el nuevo archivo del estudiante: ");
-                    student.file = scanner.nextInt();
+                            course.UpdateStudent(newStudent, student);
+                        } 
+                        
 
-                    course.UpdateStudent(student);
-
-                } else {
-                    System.out.println("Estudiante no encontrado.\n");
-                }
+                    } else {
+                        System.out.println("Estudiante no encontrado.\n");
+                    }
                 break;
 
                 default:
@@ -115,8 +143,18 @@ public class App {
         //     course.addStudent(s);
         // }
 
-         course.showCourseData();
         scanner.close();
+    }
+
+    private static boolean validationParameters(String name, String dni, int file) {
+        
+        if (name.equals("") || dni.equals("") || file <= 0) {
+            System.out.println("Los datos del estudiante no pueden estar vacíos o el archivo debe ser mayor que cero.");
+            return false;
+            
+        }
+
+        return true;
     }
 }
 

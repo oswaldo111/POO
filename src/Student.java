@@ -1,8 +1,11 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Student extends Person {
     
     protected int file;
+    List<Student> students = new ArrayList<>();
+    FileInterantion fileInterantion = new FileInterantion();
   
     public int getFile() {
         return file;
@@ -19,12 +22,11 @@ public class Student extends Person {
     }
 
     public Student() {
+
+        students = fileInterantion.loadCourseFromFile();
     }
 
     public void showStudentData() {
-        FileInterantion fileInterantion = new FileInterantion();
-
-        List<Student> students  = fileInterantion.loadCourseFromFile();
 
         for (Student student : students) {
            

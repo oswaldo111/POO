@@ -1,17 +1,7 @@
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class Course {
+public class Course extends Student{
 
     protected String courseName;
     protected String teacher;
-    protected List<Student> students;
-    Student student = new Student();
-    FileInterantion fileInterantion = new FileInterantion();
-
-  
 
     public String getCourseName() {
         return courseName;
@@ -29,18 +19,9 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
     public Course() {
-        this.courseName = "";
-        this.teacher = "";
-        this.students = fileInterantion.loadCourseFromFile();
+        this.courseName = "aa";
+        this.teacher = "zz";
     }
 
     protected void addStudent(Student student) {
@@ -48,11 +29,14 @@ public class Course {
     }   
 
     protected void showCourseData() {
+        Student student = new Student();
+        
         System.out.println("Course Name: " + courseName);
         System.out.println("Teacher: " + teacher);
         System.out.println("Students enrolled:");
         System.out.println("--------------------");
         student.showStudentData();
+        countStudents();
     }
 
     protected Student searchStudentByDni(String dni){
@@ -87,9 +71,9 @@ public class Course {
         }
     }
 
-    protected void UpdateStudent(Student newStudent) {
+    protected void UpdateStudent(Student newStudent, Student oldStudent) {
        
-        int index = students.indexOf(newStudent);
+        int index = students.indexOf(oldStudent);
 
         students.get(index).setName(newStudent.name);
         students.get(index).setDni(newStudent.dni);
@@ -98,8 +82,6 @@ public class Course {
         fileInterantion.overwriteCourseFile(students);
 
         System.out.println("Student updated successfully.");
-
-
     }
 
     protected void countStudents() {
