@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Student extends Person {
@@ -24,8 +25,20 @@ public class Student extends Person {
     public Student() {
 
         students = fileInterantion.loadCourseFromFile();
+        orderStudentsByName();
     }
 
+    public void orderStudentsByName()
+    {
+        students.sort(new Comparator<Student>() {
+
+            @Override
+            public int compare(Student s1, Student s2) {
+                
+                return s1.getName().compareToIgnoreCase(s2.getName());
+            }
+        });
+    }
     public void showStudentData() {
 
         for (Student student : students) {
@@ -36,7 +49,4 @@ public class Student extends Person {
             System.out.println("--------------------");
         }
     }
-
-
-
 }

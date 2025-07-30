@@ -37,6 +37,7 @@ public class Course extends Student{
         System.out.println("--------------------");
         student.showStudentData();
         countStudents();
+        orderStudentsByName();
     }
 
     protected Student searchStudentByDni(String dni){
@@ -61,9 +62,11 @@ public class Course extends Student{
      Student student = searchStudentByDni(dni);
 
         if (student != null) {
+
             students.remove(student);
             System.out.println("Student with DNI " + dni + " has been removed successfully.");
             fileInterantion.overwriteCourseFile(students);
+            orderStudentsByName();
         } else {
             
             System.out.println("No student found with the provided file number.\n");
@@ -80,7 +83,7 @@ public class Course extends Student{
         students.get(index).setFile(newStudent.file);
 
         fileInterantion.overwriteCourseFile(students);
-
+        orderStudentsByName();
         System.out.println("Student updated successfully.");
     }
 

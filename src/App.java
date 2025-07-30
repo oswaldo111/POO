@@ -3,8 +3,6 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
         
-        //save and load from a file
-
         Course course = new Course();
         Scanner scanner = new Scanner(System.in);
         FileInterantion fileInterantion = new FileInterantion();
@@ -55,6 +53,7 @@ public class App {
                             student.setFile(file);
                             course.addStudent(student);
                             fileInterantion.saveCourseToFile(student);
+                            System.out.println("Estudiante añadido correctamente.\n");
                         }
                     }
                     else {
@@ -99,27 +98,24 @@ public class App {
                     scanner.nextLine();
 
                     System.out.print("ingrese el dni del estudiante a modificar: ");
-                    String modifyDni = scanner.nextLine();
-                    student = course.searchStudentByDni(modifyDni);
+                    String Dni = scanner.nextLine();
+                    //old student for the update
+                    student = course.searchStudentByDni(Dni);
 
                     if (student != null) {
                         
                         System.out.print("Ingrese el nuevo nombre del estudiante: ");
                         String name = scanner.nextLine();
 
-                        System.out.print("Ingrese el nuevo DNI del estudiante: ");
-                        modifyDni = scanner.nextLine();
 
                         System.out.print("Ingrese el nuevo archivo del estudiante: ");
                         int file = scanner.nextInt();
                         
-                        if(validationParameters(name, modifyDni, file)){
-                            Student newStudent = new Student(name, modifyDni, file);
+                        if(validationParameters(name, " ",file)){
 
+                            Student newStudent = new Student(name, Dni, file);
                             course.UpdateStudent(newStudent, student);
                         } 
-                        
-
                     } else {
                         System.out.println("Estudiante no encontrado.\n");
                     }
@@ -148,12 +144,20 @@ public class App {
 
     private static boolean validationParameters(String name, String dni, int file) {
         
-        if (name.equals("") || dni.equals("") || file <= 0) {
-            System.out.println("Los datos del estudiante no pueden estar vacíos o el archivo debe ser mayor que cero.");
-            return false;
+        try {
             
-        }
+            Integer.parseInt(name);
 
+            System.out.println("El nombre no puede ser un número o esta vacio.");
+            return false;
+
+        } catch (NumberFormatException e) {
+            if (dni.equals("") || file <= 0) {
+    
+                System.out.println("Los datos del estudiante no pueden estar vacíos o el archivo debe ser mayor que cero.");
+                return false;
+            }
+        }
         return true;
     }
 }
